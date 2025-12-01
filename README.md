@@ -1,2 +1,3 @@
-# tocadiscos-editora
-Gestão de autores e álbuns da editora Tocadiscos – Trabalho Prático 2025/2026
+# Tocadiscos Editora
+
+Projeto de Gestão de Discografia - 2025
