@@ -6,13 +6,13 @@ def feedAuthors (authorsDict, line):
                     'artist_nacionality' :line['artist_nacionality'],
                     'album_title': [line['album_title']],
                     'rights_percentage' : randint(10, 50),
-                    'total_earned' : float(line['track_price']) * int(line['track_interest'])
+                    'total_earned' : round(float(line['track_price']) * int(line['track_interest']),2)
                 }
 
 
 def updateAuthors(authorsDict, line):
-
-    authorsDict[int(line['artist_id'])]['total_earned'] += float(line['track_price']) * int(line['track_interest'])
+    authorsDict[int(line['artist_id'])]['total_earned'].append(line['album_title'])
+    authorsDict[int(line['artist_id'])]['total_earned'] += round(float(line['track_price']) * int(line['track_interest']),2)
 
 
 def feedAlbums (albumsDict, line):
@@ -36,7 +36,7 @@ def updateAlbums(albumsDict, line):
     albumsDict[int(line['album_id'])]['album_price'] += float(line['track_price'])
 
     #update tracks
-    albumsDict[int(line['album_id'])]['unites_sold'].append((int(line['track_id']),line['track_title'])) 
+    albumsDict[int(line['album_id'])]['tracks'].append((int(line['track_id']),line['track_title'])) 
 
 
 

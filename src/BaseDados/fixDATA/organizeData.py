@@ -17,14 +17,11 @@ tracksUsableFile.close()
 
 for line in tracksUsableData[1:]:
 
-    emptyCount = 0
-
-    for item in line.values():
-        if item == '':
-            emptyCount += 1
-
-    if emptyCount > 0:
-        print(line)
+    # descartar entradas desnecessárias
+    try:
+        artist_id = int(line['artist_id'])
+        album_id = int(line['album_id'])
+    except:
         continue
 
 
@@ -32,21 +29,20 @@ for line in tracksUsableData[1:]:
     if len(authorsDict) == 0 and len(albumsDict) == 0:
         feedAuthors(authorsDict, line)
         feedAlbums(albumsDict, line) 
-        print(authorsDict)
 
     # Adicionar novas entradas OU atualizar entradas existentes
     if len(authorsDict) > 0 and len(albumsDict) > 0:
 
         # Authors
         # Adicionar novo Autor
-        if  int(line['artist_id']) not in authorsDict:
+        if  artist_id not in authorsDict:
             try:
                 feedAuthors(authorsDict, line)
             except:
                 continue
 
         # Adicionar dados a autor já existente
-        elif int(line['artist_id'])  in authorsDict:
+        elif artist_id in authorsDict:
             try:
                 updateAuthors(authorsDict, line)
             except:
@@ -55,7 +51,7 @@ for line in tracksUsableData[1:]:
 
         # Albums
         # Adicionar novo album
-        if int(line['album_id']) not in albumsDict:
+        if album_id not in albumsDict:
             try:
                 feedAlbums(albumsDict, line)
             except:
@@ -63,18 +59,16 @@ for line in tracksUsableData[1:]:
 
 
         # Adicionar dados a a album já existente
-        elif int(line['album_id']) not in albumsDict:
+        elif album_id in albumsDict:
             try:
-                updateAlbums(albumsDict)
+                updateAlbums(albumsDict, line)
+                print(albumsDict(album_id)['tracks'])
             except:
                 continue
 
-
-print(authorsDict)
-
-# print(albumsDict)
-# print(authorsDict)
-
+for item in albumsDict:
+    if len(albumsDict[item]['tracks']) > 1:
+        print(albumsDict[item]['tracks'])
 
 ## creating authors table
 
