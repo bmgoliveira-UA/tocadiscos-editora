@@ -4,15 +4,16 @@ def feedAuthors (authorsDict, line):
     authorsDict[int(line['artist_id'])] = {
                     'artist_name' : line['artist_name'],
                     'artist_nacionality' :line['artist_nacionality'],
-                    'album_title': [line['album_title']],
+                    'album_title': [(int(line['album_id']), line['album_title'])],
                     'rights_percentage' : randint(10, 50),
                     'total_earned' : round(float(line['track_price']) * int(line['track_interest']),2)
                 }
 
 
 def updateAuthors(authorsDict, line):
-    authorsDict[int(line['artist_id'])]['total_earned'].append(line['album_title'])
+    authorsDict[int(line['artist_id'])]['album_title'].append((int(line['album_id']), line['album_title']))
     authorsDict[int(line['artist_id'])]['total_earned'] += round(float(line['track_price']) * int(line['track_interest']),2)
+
 
 
 def feedAlbums (albumsDict, line):

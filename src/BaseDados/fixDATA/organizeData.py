@@ -1,15 +1,13 @@
 from csv import DictReader
 from dataFormat import feedAlbums, updateAlbums, feedAuthors, updateAuthors
 
-## MAKING DIFFERENT TABLES ##
-authorsData = []
-albumsData = []
-
+#ORGANIZING DATA IN DICTIONARIES
 authorsDict = {}
 albumsDict = {}
 
+# transforma cada line numa lista
 tracksUsableFile = open('data/raw_tracks.csv', 'r', encoding='utf-8-sig' )
-tracksUsableData = list(DictReader(tracksUsableFile.readlines())) # transforma cada line numa lista
+tracksUsableData = list(DictReader(tracksUsableFile.readlines())) 
 tracksUsableFile.close()
 
 
@@ -62,26 +60,54 @@ for line in tracksUsableData[1:]:
         elif album_id in albumsDict:
             try:
                 updateAlbums(albumsDict, line)
-                print(albumsDict(album_id)['tracks'])
             except:
                 continue
 
-for item in albumsDict:
-    if len(albumsDict[item]['tracks']) > 1:
-        print(albumsDict[item]['tracks'])
+# ----FIM----  ORGANIZING DATA IN DICTIONARIES
+
+
+
+# MAKING DIFFERENT TABLES
+authorsData = []
+albumsData = []
+
+authorsColumns = list(authorsDict[1].keys())
+albumsColumns = list(albumsDict[1].keys())
+
+def dict_2_array (dicionario, lista):
+    for index in dicionario:
+        entry = list(dicionario[index].values())
+
+        for val in range(0,len(entry)):
+            entry[val] = str(entry[val])
+        entry = ','.join(entry) + '\n'
+
+        lista.append(entry)
+        
+
+# dict_2_array(authorsDict)
+dict_2_array(authorsDict, authorsData)
+dict_2_array(albumsDict, albumsData)
+
+
+#adding columns to the begining of the array 
+
+authorsData.insert(0, ','.join(authorsColumns) + '\n')
+albumsData.insert(0, ','.join(albumsColumns) + '\n')
+
 
 ## creating authors table
 
-# authorsTable = open('data/authors_table.csv', 'w', encoding='utf-8-sig')
-# authorsTable.writelines()
-# authorsTable.close()
+authorsTable = open('data/authors_table.csv', 'w', encoding='utf-8-sig')
+authorsTable.writelines(authorsData)
+authorsTable.close()
 
 
 ## creating albums table
 
-# albumsTable = open('data/albums_table.csv', 'w', encoding='utf-8-sig')
-# albumsTable.writelines()
-# albumsTable.close()
+albumsTable = open('data/albums_table.csv', 'w', encoding='utf-8-sig')
+albumsTable.writelines(albumsData)
+albumsTable.close()
 
 
-## ----FIM---- MAKING DIFFERENT TABLES ##
+# ----FIM----  MAKING DIFFERENT TABLES
